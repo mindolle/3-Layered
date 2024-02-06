@@ -61,7 +61,7 @@ router.put("/resume/:resumeId", authMiddleware, async (req, res, next) => {
     });
   if (resume.userId !== userId) {
     return res.status(404).json({
-      message: "사용자가 다릅니다.",
+      message: "본인이 작성한 이력서만 수정할 수 있음!",
     });
   }
   if (!Statuses.includes(status)) {
@@ -78,7 +78,7 @@ router.put("/resume/:resumeId", authMiddleware, async (req, res, next) => {
       status,
     },
   });
-  return res.status(201).json({ data: updatedResume });
+  return res.status(200).json({ data: updatedResume });
 });
 
 // - 이력서 ID를 데이터로 넘겨 이력서를 삭제 요청합니다.
@@ -110,7 +110,7 @@ router.delete("/resume/:resumeId", authMiddleware, async (req, res, next) => {
     where: { resumeId: +resumeId },
   });
 
-  return res.status(201).json({ message: "삭제 완료!!!" });
+  return res.status(200).json({ message: "삭제 완료!!!" });
 });
 
 // - 이력서 ID, 이력서 제목, 자기소개, 작성자명, 이력서 상태, 작성 날짜 조회하기 (여러건)

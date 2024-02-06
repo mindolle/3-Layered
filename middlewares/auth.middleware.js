@@ -28,6 +28,7 @@ export default async function (req, res, next) {
     if (!user) throw new Error("토큰 사용자가 존재하지 않습니다."); // JWT의 userId를 이용해 사용자를 조회
 
     req.user = user; // req.user에 조회된 사용자 정보를 할당
+
     next(); // 다음 미들웨어를 실행
   } catch (error) {
     if (error.name === "TokenExpiredError")

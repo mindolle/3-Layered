@@ -3,7 +3,7 @@ import { prisma } from "../model/index.js";
 import jwt from "jsonwebtoken";
 // import { Prisma } from "@prisma/client";
 import bcrypt from "bcrypt";
-// import authMiddleware from "../middlewares/auth.middleware.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -35,7 +35,9 @@ router.post("/sign-up", async (req, res, next) => {
         name,
       },
     });
-    return res.status(201).json({ message: "회원가입이 완료되었습니다." });
+    return res
+      .status(201)
+      .json({ message: "회원가입이 완료되었습니다.", email, name });
   } catch (err) {
     next(err);
   }
@@ -66,4 +68,13 @@ router.post("/sign-in", async (req, res, next) => {
   return res.status(200).json({ message: "로그인에 성공하였습니다." });
 });
 
+// 사용자 조회 API
+router.get("/me", authMiddleware, async (req, res) => {
+  const users = req.user;
+
+  return res.json({
+    email: users.email,
+    name: users.name,
+  });
+});
 export default router;
