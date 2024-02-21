@@ -6,8 +6,8 @@ export class DocController {
 
   getResume = async (req, res, next) => {
     try {
-      // 서비스 계층에 구현된 findAllPosts 로직을 실행합니다.
-      const resumes = await this.DocService.findAllPosts();
+      // 서비스 계층에 구현된 findAllResume 로직을 실행합니다.
+      const resumes = await this.DocService.findAllResume();
 
       return res.status(200).json({ data: resumes });
     } catch (err) {
@@ -30,15 +30,10 @@ export class DocController {
 
   createResume = async (req, res, next) => {
     try {
-      const { nickname, password, title, content } = req.body;
+      const { userId, title, content, status } = req.body;
 
       // 서비스 계층에 구현된 createPost 로직을 실행합니다.
-      const createdResume = await this.DocService.createResume(
-        nickname,
-        password,
-        title,
-        content
-      );
+      const createdResume = await this.DocService.createResume(userId, title, content, status);
 
       return res.status(201).json({ data: createdResume });
     } catch (err) {
@@ -49,15 +44,10 @@ export class DocController {
   updateResume = async (req, res, next) => {
     try {
       const { resumeId } = req.params;
-      const { password, title, content } = req.body;
+      const { userId, title, content, status } = req.body;
 
-      // 서비스 계층에 구현된 updatePost 로직을 실행합니다.
-      const updatedResume = await this.DocService.updateResume(
-        postId,
-        password,
-        title,
-        content
-      );
+      // 서비스 계층에 구현된 updateResume 로직을 실행합니다.
+      const updatedResume = await this.DocService.updateResume(resumeId, userId, title, content, status);
 
       return res.status(200).json({ data: updatedResume });
     } catch (err) {
@@ -68,15 +58,12 @@ export class DocController {
   deleteResume = async (req, res, next) => {
     try {
       const { resumeId } = req.params;
-      const { password } = req.body;
+      const { userId } = req.user;
 
-      // 서비스 계층에 구현된 deletePost 로직을 실행합니다.
-      const deletedResume = await this.DocService.deleteResume(
-        resumeId,
-        password
-      );
+      // 서비스 계층에 구현된 deleteResume 로직을 실행합니다.
+      const deletedResume = await this.DocService.deleteResume(resumeId);
 
-      return res.status(200).json({ data: deletedResume });
+      return res.status(200).json({ message: "삭제 완료!!" });
     } catch (err) {
       next(err);
     }

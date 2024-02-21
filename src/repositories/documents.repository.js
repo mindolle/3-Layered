@@ -50,11 +50,12 @@ export class DocRepository {
     return updatedresume;
   };
 
-  deleteResume = async (ResumeId) => {
+  deleteResume = async (resumeId, userId) => {
     // ORM인 Prisma에서 Resume 모델의 delete 메서드를 사용해 데이터를 삭제합니다.
     const deletedResume = await prisma.resume.delete({
       where: {
-        ResumeId: +ResumeId,
+        resumeId: +resumeId,
+        userId: +userId,
       },
     });
 
@@ -63,6 +64,7 @@ export class DocRepository {
 
   // ----------------------------------------------------------------
 
+  // 이거 필요한가?
   getResumes = async (orderBy) => {
     return await prisma.resume.findMany({
       select: {

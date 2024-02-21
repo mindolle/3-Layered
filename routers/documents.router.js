@@ -11,14 +11,7 @@ const router = express.Router();
 router.post("/resume", authMiddleware, async (req, res, next) => {
   const { userId } = req.user;
   const { title, content, status = "APPLY" } = req.body;
-  const Statuses = [
-    "APPLY",
-    "DROP",
-    "PASS",
-    "INTERVIEW1",
-    "INTERVIEW2",
-    "FINAL_PASS",
-  ];
+  const Statuses = ["APPLY", "DROP", "PASS", "INTERVIEW1", "INTERVIEW2", "FINAL_PASS"];
   if (!Statuses.includes(status)) {
     return res.status(409).json({
       message: "이력서 상태가 이상합니다.",
@@ -44,14 +37,7 @@ router.put("/resume/:resumeId", authMiddleware, async (req, res, next) => {
   const { userId } = req.user;
   const { title, content, status = "APPLY" } = req.body;
   const { resumeId } = req.params;
-  const Statuses = [
-    "APPLY",
-    "DROP",
-    "PASS",
-    "INTERVIEW1",
-    "INTERVIEW2",
-    "FINAL_PASS",
-  ];
+  const Statuses = ["APPLY", "DROP", "PASS", "INTERVIEW1", "INTERVIEW2", "FINAL_PASS"];
   const resume = await prisma.resume.findUnique({
     where: { resumeId: +resumeId },
   });
@@ -122,8 +108,7 @@ router.get("/resume", authMiddleware, async (req, res, next) => {
   const { orderKey, orderValue } = req.query;
   let orderBy = {};
   if (orderKey) {
-    orderBy[orderKey] =
-      orderValue && orderValue.toUpperCase() === "ASC" ? "asc" : "desc";
+    orderBy[orderKey] = orderValue && orderValue.toUpperCase() === "ASC" ? "asc" : "desc";
   } else {
     orderBy = { createdAt: "desc" };
   }
