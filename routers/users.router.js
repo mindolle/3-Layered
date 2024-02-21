@@ -1,7 +1,6 @@
 import express from "express";
 import { prisma } from "../model/index.js";
 import jwt from "jsonwebtoken";
-// import { Prisma } from "@prisma/client";
 import bcrypt from "bcrypt";
 import authMiddleware from "../middlewares/auth.middleware.js";
 
