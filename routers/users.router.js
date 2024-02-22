@@ -10,22 +10,24 @@ const router = express.Router();
 router.post("/sign-up", async (req, res, next) => {
   try {
     const { email, password, checkpassword, name } = req.body;
+
+    // repo
     const isExistUser = await prisma.users.findFirst({
       where: { email },
     });
+
+    // serv
     if (isExistUser) {
       return res.status(409).json({ message: "이미 존재하는 이메일입니다." });
     }
 
-    if (password.length < 6)
-      return res.status(409).json({ message: "비밀번호가 너무 짧아요!" });
+    if (password.length < 6) return res.status(409).json({ message: "비밀번호가 너무 짧아요!" });
 
-    if (password !== checkpassword)
-      return res
-        .status(409)
-        .json({ message: "비밀번호 확인과 일치하지 않습니다!" });
+    if (password !== checkpassword) return res.status(409).json({ message: "비밀번호 확인과 일치하지 않습니다!" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // repo
     const user = await prisma.users.create({
       data: {
         email,
@@ -34,9 +36,8 @@ router.post("/sign-up", async (req, res, next) => {
         name,
       },
     });
-    return res
-      .status(201)
-      .json({ message: "회원가입이 완료되었습니다.", email, name });
+
+    return res.status(201).json({ message: "회원가입이 완료되었습니다.", email, name });
   } catch (err) {
     next(err);
   }
@@ -48,8 +49,7 @@ router.post("/sign-in", async (req, res, next) => {
 
   const user = await prisma.users.findFirst({ where: { email } });
 
-  if (!user)
-    return res.status(401).json({ message: "존재하지 않는 이메일입니다." });
+  if (!user) return res.status(401).json({ message: "존재하지 않는 이메일입니다." });
   if (!(await bcrypt.compare(password, user.password)))
     return res.status(401).json({ message: "비밀번호가 일치하지 않습니다." });
   // 엑서스 토큰 생성!!
